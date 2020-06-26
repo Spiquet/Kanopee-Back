@@ -9,6 +9,7 @@ import { randomBytes } from 'crypto';
 import { createTestAccount, createTransport, getTestMessageUrl } from 'nodemailer';
 import { TokenService } from './token.service';
 import { UserService } from './user.service';
+
 export class AuthService {
 
   private tokenService: TokenService;
@@ -58,6 +59,7 @@ export class AuthService {
       throw error;
     }
 
+    // construcion du payload
     const payload = { id: user.id, email: user.email, role: user.role };
 
     const secret1 = environnment.JWT_SECRET; // Variable environnement
@@ -77,6 +79,7 @@ export class AuthService {
     await this.userService.userActivation(token.user); // on appelle méthode userActivation pour activer un compte
   }
 
+  // NODEMAILER
   private async nodemailer(token: string, user: User) {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
