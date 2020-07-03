@@ -4,6 +4,7 @@ import { ContactService } from '../services/contact.service';
 import { createTestAccount, createTransport, getTestMessageUrl } from 'nodemailer';
 import { AuthService } from '../services/auth.service';
 import express, { Application, Request, Response, Router } from 'express';
+import { info } from 'console';
 
 export const MailController = (app: Application) => {
 
@@ -19,6 +20,7 @@ export const MailController = (app: Application) => {
   mailRouter.get('/email', async (req: Request, res: Response) => {
 
     let user = req.body;
+
     try {
       user = await contactService.nodemailer(user);
       res.send(user);
