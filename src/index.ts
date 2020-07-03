@@ -8,6 +8,7 @@ import { SiteController } from './controller/site.controller';
 import { ResponseController } from './controller/response.controller';
 import { EventController } from './controller/event.controller';
 import { AuthController } from './controller/auth.controller';
+import { MailController } from './controller/contact.controller';
 
 async function startServer() {
 
@@ -22,6 +23,7 @@ async function startServer() {
   ResponseController(app);
   SiteController(app);
   AuthController(app);
+  MailController(app);
 
   app.listen(3000, () => console.log('Express server  is running'));
 
