@@ -28,10 +28,11 @@ export class ContactService {
     // send mail with defined transport object
     const info = await transporter.sendMail({
       from: user.email, // sender address // Mettre adresse client
-      to: user.email , // list of receivers
+      to: 'piquet.simon@yahoo.fr' , // list of receivers
       subject: 'Mail de contact', // Subject line
       html: `<b><a>Mail de contact pour test</a>
       </b>`, // html body
+      text: 'jjjj',
     });
 
     console.log('Message sent: %s', info.messageId);

@@ -17,7 +17,7 @@ export const MailController = (app: Application) => {
     res.send('Test Send mail');
   }),
 
-  mailRouter.get('/email', async (req: Request, res: Response) => {
+  mailRouter.post('/email', async (req: Request, res: Response) => {
 
     let user = req.body;
 
