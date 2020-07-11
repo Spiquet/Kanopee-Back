@@ -5,6 +5,7 @@ import { createTestAccount, createTransport, getTestMessageUrl } from 'nodemaile
 import { AuthService } from '../services/auth.service';
 import express, { Application, Request, Response, Router } from 'express';
 import { info } from 'console';
+import { userInfo } from 'os';
 
 export const MailController = (app: Application) => {
 
@@ -19,15 +20,26 @@ export const MailController = (app: Application) => {
 
   mailRouter.post('/email', async (req: Request, res: Response) => {
 
-    let user = req.body;
+    // let user = req.body;
+    let senderName = req.body.firstName;
+    let senderEmail = req.body.email;
+    let messageSubject = req.body.objet;
+    let messageText = req.body.message;
 
     try {
-      user = await contactService.nodemailer(user);
-      res.send(user);
-    } catch (error) {
+
+      senderName = await contactService.nodemailer(senderName);
+      senderEmail = await contactService.nodemailer(senderEmail);
+      messageSubject = await contactService.nodemailer(messageSubject);
+      messageText = await contactService.nodemailer(messageText);
+      res.send(senderName);
+      res.send(senderEmail);
+      res.send(messageSubject);
+      res.send(messageText);
+     } catch (error) {
 
       res.status(400).send('Mail problème');
-    }
+     }
   }),
   app.use('/contact', mailRouter);
 };
