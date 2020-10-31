@@ -19,7 +19,7 @@ var abstract_service_1 = require("../core/abstract.service");
 var SiteService = /** @class */ (function (_super) {
     __extends(SiteService, _super);
     function SiteService() {
-        var _this = _super.call(this) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.repository = typeorm_1.getCustomRepository(site_repository_1.SiteRepository);
         return _this;
     }

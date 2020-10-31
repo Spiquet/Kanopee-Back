@@ -6,7 +6,7 @@ export class TokenService {
   protected repository = getCustomRepository(TokenRepository);
 
   create(token: Token) {
-    // token = this.repository.create(token)!; // Ici redondance de code avec le auth.service const token = new Token()
+    // token = this.repository.create(token)!; // Here code redundancy with the auth.service const token = new Token()
     return this.repository.save(token);
   }
 

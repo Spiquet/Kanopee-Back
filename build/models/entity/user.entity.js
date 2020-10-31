@@ -17,7 +17,7 @@ var participation_entity_1 = require("./participation.entity");
 var event_entity_1 = require("./event.entity");
 var UserRole;
 (function (UserRole) {
-    UserRole["GHOST"] = "gohst";
+    UserRole["GHOST"] = "ghost";
     UserRole["USER"] = "user";
     UserRole["KULTEUR"] = "kulteur";
     UserRole["ADMIN"] = "admin";
@@ -38,6 +38,14 @@ var User = /** @class */ (function () {
         typeorm_1.Column(),
         __metadata("design:type", String)
     ], User.prototype, "lastName", void 0);
+    __decorate([
+        typeorm_1.CreateDateColumn(),
+        __metadata("design:type", Date)
+    ], User.prototype, "birth_date", void 0);
+    __decorate([
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], User.prototype, "home", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
@@ -68,11 +76,15 @@ var User = /** @class */ (function () {
         __metadata("design:type", Date)
     ], User.prototype, "createdAt", void 0);
     __decorate([
+        typeorm_1.CreateDateColumn(),
+        __metadata("design:type", Date)
+    ], User.prototype, "updateAt", void 0);
+    __decorate([
         typeorm_1.Column({ default: false }),
         __metadata("design:type", Boolean)
     ], User.prototype, "isActive", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return site_entity_1.Site; }, function (site) { return site.users; }),
+        typeorm_1.ManyToOne(function (type) { return site_entity_1.Site; }, function (site) { return site.users; }, { eager: true }),
         __metadata("design:type", site_entity_1.Site)
     ], User.prototype, "site", void 0);
     __decorate([
@@ -80,7 +92,8 @@ var User = /** @class */ (function () {
         __metadata("design:type", Array)
     ], User.prototype, "messages", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return participation_entity_1.Participation; }, function (participation) { return participation.user; }),
+        typeorm_1.OneToMany(function (type) { return participation_entity_1.Participation; }, function (participation) { return participation.user; }, { cascade: true, onDelete: 'CASCADE' }),
+        typeorm_1.JoinColumn(),
         __metadata("design:type", Array)
     ], User.prototype, "participations", void 0);
     __decorate([
@@ -88,7 +101,8 @@ var User = /** @class */ (function () {
         __metadata("design:type", Array)
     ], User.prototype, "events", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return response_entity_1.Response; }, function (response) { return response.user; }),
+        typeorm_1.OneToMany(function (type) { return response_entity_1.Response; }, function (response) { return response.user; }, { cascade: true, onDelete: 'CASCADE' }),
+        typeorm_1.JoinColumn(),
         __metadata("design:type", Array)
     ], User.prototype, "responses", void 0);
     User = __decorate([

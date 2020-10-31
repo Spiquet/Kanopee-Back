@@ -7,7 +7,7 @@ var TokenService = /** @class */ (function () {
         this.repository = typeorm_1.getCustomRepository(token_repository_1.TokenRepository);
     }
     TokenService.prototype.create = function (token) {
-        token = this.repository.create(token);
+        // token = this.repository.create(token)!; // Here code redundancy with the auth.service const token = new Token()
         return this.repository.save(token);
     };
     TokenService.prototype.getByValue = function (value) {

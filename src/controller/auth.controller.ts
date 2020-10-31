@@ -35,8 +35,8 @@ export const AuthController = (app: Application) => {
     try {
       const { token, user } = await authService.signin(userB.email, userB.password);
       res.set('access-control-expose-headers', 'JWT-TOKEN');
-      res.set('JWT-TOKEN', token); // Set du header
-      res.send(user);
+      res.set('JWT-TOKEN', token); // Set and send  header (autorization)
+      res.send(user); // Send the user
     } catch (error) {
       console.log(error);
 

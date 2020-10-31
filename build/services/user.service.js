@@ -60,6 +60,13 @@ var UserService = /** @class */ (function (_super) {
         _this.repository = typeorm_1.getCustomRepository(user_repository_1.UserRepository);
         return _this;
     }
+    UserService.prototype.getById = function (id) {
+        var getId = this.repository.findOne(id, { relations: ['site'] });
+        if (!getId) {
+            throw new Error("L'utilisateur d'id " + id + " n'existe pas ");
+        }
+        return getId;
+    };
     UserService.prototype.userActivation = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {

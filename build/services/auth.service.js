@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var environment_1 = require("./../environments/environment");
 var token_entity_1 = require("./../models/entity/token.entity");
 var user_repository_1 = require("../repository/user.repository");
 var typeorm_1 = require("typeorm");
@@ -51,6 +52,7 @@ var AuthService = /** @class */ (function () {
         this.tokenService = new token_service_1.TokenService();
         this.userService = new user_service_1.UserService();
     }
+    // Crypte le password
     AuthService.prototype.signup = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, tokenString, token;
@@ -60,8 +62,9 @@ var AuthService = /** @class */ (function () {
                         _a = user;
                         return [4 /*yield*/, argon2_1.hash(user.password)];
                     case 1:
-                        _a.password = _b.sent();
-                        user = this.repository.create(user);
+                        _a.password = _b.sent(); // argon2
+                        delete user.role;
+                        user = this.repository.create(user); // Initialisation d'un objet user
                         return [4 /*yield*/, this.repository.save(user)];
                     case 2:
                         user = _b.sent();
@@ -72,7 +75,7 @@ var AuthService = /** @class */ (function () {
                         token = new token_entity_1.Token();
                         token.user = user;
                         token.value = tokenString;
-                        // Si mise en place expiration token.expiration = new Date(getTime() + 1000*60*60*24*2)
+                        // token.expiration = new Date(getTime() + 1000 * 60 * 60 * 24 * 2);
                         this.tokenService.create(token);
                         return [2 /*return*/];
                 }
@@ -80,31 +83,36 @@ var AuthService = /** @class */ (function () {
         });
     };
     AuthService.prototype.signin = function (email, password) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var error, user, isValid, payload, secret1, token;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var error, user, isPasswordValid, payload, secret1, token;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         error = new Error('Invalid credentials');
                         return [4 /*yield*/, this.repository.findOne({ where: { email: email } })];
                     case 1:
-                        user = _a.sent();
-                        if (!user) {
+                        user = _b.sent();
+                        // tslint:disable-next-line: whitespace
+                        if (!((_a = user) === null || _a === void 0 ? void 0 : _a.isActive)) {
+                            throw new Error('NOT_ACTIVE');
+                        }
+                        if (!user) { // if not a user
                             throw error;
                         }
                         return [4 /*yield*/, argon2_1.verify(user.password, password)];
                     case 2:
-                        isValid = _a.sent();
-                        if (!isValid) {
+                        isPasswordValid = _b.sent();
+                        if (!isPasswordValid) {
                             throw error;
                         }
                         payload = { id: user.id, email: user.email, role: user.role };
-                        secret1 = process.env.WILD_JWT_SECRET;
+                        secret1 = environment_1.environnment.JWT_SECRET;
                         if (!secret1) {
-                            throw new Error('Servor not correctly configured');
+                            throw new Error('Servor not correctly configured'); // For the start of production  : if Variable environments not set
                         }
                         token = jsonwebtoken_1.sign(payload, secret1);
-                        return [2 /*return*/, token];
+                        return [2 /*return*/, { token: token, user: user }];
                 }
             });
         });
@@ -122,42 +130,51 @@ var AuthService = /** @class */ (function () {
                         }
                         return [4 /*yield*/, this.userService.userActivation(token.user)];
                     case 2:
-                        _a.sent();
+                        _a.sent(); // we call userActivation method to activate an account
                         return [2 /*return*/];
                 }
             });
         });
     };
+    // NODEMAILER
     AuthService.prototype.nodemailer = function (token, user) {
         return __awaiter(this, void 0, void 0, function () {
-            var testAccount, transporter, info;
+            var testAccount, transporter, info, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, nodemailer_1.createTestAccount()];
                     case 1:
                         testAccount = _a.sent();
                         transporter = nodemailer_1.createTransport({
-                            host: 'smtp.ethereal.email',
-                            port: 587,
+                            host: environment_1.environnment.mailHost,
+                            port: environment_1.environnment.mailPort,
                             secure: false,
                             auth: {
                                 user: testAccount.user,
                                 pass: testAccount.pass,
                             },
                         });
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
                         return [4 /*yield*/, transporter.sendMail({
-                                from: '"Fred Foo 👻" <foo@example.com>',
+                                from: environment_1.environnment.EMAIL,
                                 to: user.email,
                                 subject: 'Activation link',
-                                html: "<b><a href=\"http://localhost:3000/auth/confirmation/" + token + "\">\n    Activation link </a>\n    </b>",
+                                html: "<b><a href=" + (environment_1.environnment.confirmationUrl + token) + ">\n        Activation link </a>\n        </b>",
                             })];
-                    case 2:
+                    case 3:
                         info = _a.sent();
                         console.log('Message sent: %s', info.messageId);
                         // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
                         // Preview only available when sending through an Ethereal account
                         console.log('Preview URL: %s', nodemailer_1.getTestMessageUrl(info));
-                        return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_1 = _a.sent();
+                        console.error(error_1);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

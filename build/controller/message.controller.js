@@ -36,26 +36,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var user_entity_1 = require("./../models/entity/user.entity");
+var connected_middleware_1 = require("./../middleware/connected-middleware");
 var message_service_1 = require("./../services/message.service");
 var express_1 = require("express");
 var comon_controller_1 = require("../core/comon.controller");
+var check_role_middleware_1 = require("../middleware/check-role-middleware");
+var attachCurrentUser_middleware_1 = require("../middleware/attachCurrentUser-middleware");
 exports.MessageController = function (app) {
     var messageService = new message_service_1.MessageService();
     var router = express_1.Router();
-    router.get('/messages', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, _b;
+    // middleware connected
+    router.use(connected_middleware_1.connected());
+    router.use(attachCurrentUser_middleware_1.attachCurrentUser);
+    router.get('/messages', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.KULTEUR, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var user, _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
+                    user = req.user;
+                    console.log(user);
                     _b = (_a = res).send;
-                    return [4 /*yield*/, messageService.getAllMessages()];
+                    return [4 /*yield*/, messageService.getMessages(user)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [2 /*return*/];
             }
         });
     }); });
-    router.get('/questions', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    router.get('/sites/:id', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.KULTEUR, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = (_a = res).send;
+                    return [4 /*yield*/, messageService.getMessagesBySiteId(Number(req.params.id))];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    router.get('/questions', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.KULTEUR, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -68,6 +90,24 @@ exports.MessageController = function (app) {
             }
         });
     }); });
+    router.post('/', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var userSite, _a, _b;
+        var _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    userSite = (_c = req.user) === null || _c === void 0 ? void 0 : _c.site;
+                    if (userSite) {
+                        req.body.site = userSite;
+                    }
+                    _b = (_a = res).send;
+                    return [4 /*yield*/, messageService.add(req.body)];
+                case 1:
+                    _b.apply(_a, [_d.sent()]);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     router = comon_controller_1.commonController(messageService, router);
-    app.use('/discussion', router);
+    app.use('/discussions', router);
 };

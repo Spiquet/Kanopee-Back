@@ -10,9 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
+var site_entity_1 = require("./site.entity");
 var user_entity_1 = require("./user.entity");
 var response_entity_1 = require("./response.entity");
-var MessageRole_1 = require("./MessageRole");
+var messageRole_1 = require("./messageRole");
 var Message = /** @class */ (function () {
     function Message() {
     }
@@ -35,15 +36,19 @@ var Message = /** @class */ (function () {
     __decorate([
         typeorm_1.Column({
             type: 'enum',
-            enum: MessageRole_1.MessageRole,
-            default: MessageRole_1.MessageRole.MESSAGE,
+            enum: messageRole_1.MessageRole,
         }),
         __metadata("design:type", String)
     ], Message.prototype, "role", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return user_entity_1.User; }, function (user) { return user.messages; }),
+        typeorm_1.ManyToOne(function (type) { return user_entity_1.User; }, function (user) { return user.messages; }, { cascade: true, onDelete: 'CASCADE' }),
+        typeorm_1.JoinColumn(),
         __metadata("design:type", user_entity_1.User)
     ], Message.prototype, "user", void 0);
+    __decorate([
+        typeorm_1.ManyToOne(function (type) { return site_entity_1.Site; }, function (site) { return site.messages; }),
+        __metadata("design:type", site_entity_1.Site)
+    ], Message.prototype, "site", void 0);
     __decorate([
         typeorm_1.OneToMany(function (type) { return response_entity_1.Response; }, function (response) { return response.message; }),
         __metadata("design:type", Array)

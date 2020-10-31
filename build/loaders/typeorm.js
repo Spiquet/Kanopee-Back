@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var environment_1 = require("../environments/environment");
 var token_entity_1 = require("./../models/entity/token.entity");
 var user_entity_1 = require("./../models/entity/user.entity");
 var typeorm_1 = require("typeorm");
@@ -51,22 +52,13 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
         switch (_a.label) {
             case 0: return [4 /*yield*/, typeorm_1.createConnection({
                     type: 'mysql',
-                    host: '51.178.16.103',
+                    host: environment_1.environnment.API_DB_HOST,
                     port: 1234,
-                    username: process.env.WILD_API_DB_USER,
-                    password: process.env.WILD_API_DB_PASSWORD,
-                    database: process.env.WILD_API_DB_DATABASE,
-                    entities: [
-                        atelier_entity_1.Atelier,
-                        site_entity_1.Site,
-                        user_entity_1.User,
-                        event_entity_1.Event,
-                        message_entity_1.Message,
-                        participation_entity_1.Participation,
-                        response_entity_1.Response,
-                        token_entity_1.Token,
-                    ],
-                    synchronize: true,
+                    username: environment_1.environnment.API_DB_USER,
+                    password: environment_1.environnment.API_DB_PASSWORD,
+                    database: environment_1.environnment.DB_DATABASE,
+                    entities: [atelier_entity_1.Atelier, site_entity_1.Site, user_entity_1.User, event_entity_1.Event, message_entity_1.Message, participation_entity_1.Participation, response_entity_1.Response, token_entity_1.Token],
+                    synchronize: true
                 })];
             case 1:
                 connection = _a.sent();

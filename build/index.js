@@ -49,6 +49,7 @@ var site_controller_1 = require("./controller/site.controller");
 var response_controller_1 = require("./controller/response.controller");
 var event_controller_1 = require("./controller/event.controller");
 var auth_controller_1 = require("./controller/auth.controller");
+var contact_controller_1 = require("./controller/contact.controller");
 function startServer() {
     return __awaiter(this, void 0, void 0, function () {
         var app;
@@ -66,6 +67,7 @@ function startServer() {
                     response_controller_1.ResponseController(app);
                     site_controller_1.SiteController(app);
                     auth_controller_1.AuthController(app);
+                    contact_controller_1.MailController(app);
                     app.listen(3000, function () { return console.log('Express server  is running'); });
                     return [2 /*return*/];
             }

@@ -13,16 +13,16 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var response_repository_1 = require("../repository/response.repository");
 var typeorm_1 = require("typeorm");
+var participation_repository_1 = require("./../repository/participation.repository");
 var abstract_service_1 = require("../core/abstract.service");
-var ResponseService = /** @class */ (function (_super) {
-    __extends(ResponseService, _super);
-    function ResponseService() {
+var ParticipationService = /** @class */ (function (_super) {
+    __extends(ParticipationService, _super);
+    function ParticipationService() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.repository = typeorm_1.getCustomRepository(response_repository_1.ResponseRepository);
+        _this.repository = typeorm_1.getCustomRepository(participation_repository_1.ParticipationRepository);
         return _this;
     }
-    return ResponseService;
+    return ParticipationService;
 }(abstract_service_1.AbstractService));
-exports.ResponseService = ResponseService;
+exports.ParticipationService = ParticipationService;

@@ -36,51 +36,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var AbstractService = /** @class */ (function () {
-    function AbstractService() {
-    }
-    AbstractService.prototype.getAll = function () {
-        return this.repository.find();
-    };
-    AbstractService.prototype.getById = function (id) {
-        var getId = this.repository.findOne(id);
-        if (!getId) {
-            throw new Error("l'objet d'id " + id + " n'existe pas ");
+var user_repository_1 = require("../repository/user.repository");
+var typeorm_1 = require("typeorm");
+// Ce middleware traduit remplace valeur de JSON du JWT par le getById du user en base de données
+// Cette étape permet en particulier de récupérer le rôle actualisé du User
+// Le résultat du JWT récupère simplement le payload à savoir : id, usernamen email
+exports.attachCurrentUser = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var userRepository, user, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                userRepository = typeorm_1.getCustomRepository(user_repository_1.UserRepository);
+                user = req.user;
+                _a = req;
+                return [4 /*yield*/, userRepository.findOne({ where: { id: user.id }, relations: ['site'] })];
+            case 1:
+                _a.user = _b.sent();
+                if (!req.user) {
+                    return [2 /*return*/, res.status(401).end('User not found')];
+                }
+                else {
+                    return [2 /*return*/, next()];
+                }
+                return [2 /*return*/];
         }
-        return getId;
-    };
-    AbstractService.prototype.add = function (element) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.create(element)];
-                    case 1:
-                        element = _a.sent();
-                        return [2 /*return*/, this.repository.save(element)];
-                }
-            });
-        });
-    };
-    AbstractService.prototype.update = function (idElement, element) {
-        return __awaiter(this, void 0, void 0, function () {
-            var one;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.findOne(idElement)];
-                    case 1:
-                        one = _a.sent();
-                        if (!one) {
-                            throw new Error("l'objet d'id " + idElement + " n'existe pas ");
-                        }
-                        this.repository.merge(one, element);
-                        return [2 /*return*/, this.repository.save(one, element)];
-                }
-            });
-        });
-    };
-    AbstractService.prototype.delete = function (id) {
-        return this.repository.delete(id);
-    };
-    return AbstractService;
-}());
-exports.AbstractService = AbstractService;
+    });
+}); };

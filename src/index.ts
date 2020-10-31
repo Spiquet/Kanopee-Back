@@ -16,6 +16,8 @@ async function startServer() {
 
   await loaders(app);
 
+// Ajout des différentes route de l'application
+
   UserController(app);
   MessageController(app);
   AteliersController(app);

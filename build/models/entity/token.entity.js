@@ -23,7 +23,11 @@ var Token = /** @class */ (function () {
         __metadata("design:type", String)
     ], Token.prototype, "value", void 0);
     __decorate([
-        typeorm_1.OneToOne(function (type) { return user_entity_1.User; }),
+        typeorm_1.CreateDateColumn(),
+        __metadata("design:type", Date)
+    ], Token.prototype, "expiration", void 0);
+    __decorate([
+        typeorm_1.OneToOne(function (type) { return user_entity_1.User; }, { cascade: true, onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn(),
         __metadata("design:type", user_entity_1.User)
     ], Token.prototype, "user", void 0);

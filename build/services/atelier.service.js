@@ -19,7 +19,7 @@ var abstract_service_1 = require("../core/abstract.service");
 var AtelierService = /** @class */ (function (_super) {
     __extends(AtelierService, _super);
     function AtelierService() {
-        var _this = _super.call(this) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.repository = typeorm_1.getCustomRepository(atelier_repository_1.AtelierRepository);
         return _this;
     }

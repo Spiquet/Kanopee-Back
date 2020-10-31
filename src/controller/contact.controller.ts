@@ -20,22 +20,12 @@ export const MailController = (app: Application) => {
 
   mailRouter.post('/email', async (req: Request, res: Response) => {
 
-    // let user = req.body;
-    let senderName = req.body.firstName;
-    let senderEmail = req.body.email;
-    let messageSubject = req.body.objet;
-    let messageText = req.body.message;
+    let user: any = [req.body.firstName, req.body.email, req.body.objet, req.body.message];
 
     try {
+      user = await contactService.nodemailer(user);
 
-      senderName = await contactService.nodemailer(senderName);
-      senderEmail = await contactService.nodemailer(senderEmail);
-      messageSubject = await contactService.nodemailer(messageSubject);
-      messageText = await contactService.nodemailer(messageText);
-      res.send(senderName);
-      res.send(senderEmail);
-      res.send(messageSubject);
-      res.send(messageText);
+      res.send(user);
      } catch (error) {
 
       res.status(400).send('Mail problème');

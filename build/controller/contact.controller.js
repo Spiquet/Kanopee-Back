@@ -35,52 +35,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var AbstractService = /** @class */ (function () {
-    function AbstractService() {
-    }
-    AbstractService.prototype.getAll = function () {
-        return this.repository.find();
-    };
-    AbstractService.prototype.getById = function (id) {
-        var getId = this.repository.findOne(id);
-        if (!getId) {
-            throw new Error("l'objet d'id " + id + " n'existe pas ");
-        }
-        return getId;
-    };
-    AbstractService.prototype.add = function (element) {
-        return __awaiter(this, void 0, void 0, function () {
+var contact_service_1 = require("../services/contact.service");
+var express_1 = __importDefault(require("express"));
+exports.MailController = function (app) {
+    // const router = Router();
+    var mailRouter = express_1.default.Router();
+    var contactService = new contact_service_1.ContactService();
+    mailRouter.get('/', function (req, res) {
+        res.send('Test Send mail');
+    }),
+        mailRouter.post('/email', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+            var user, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.create(element)];
+                    case 0:
+                        user = [req.body.firstName, req.body.email, req.body.objet, req.body.message];
+                        _a.label = 1;
                     case 1:
-                        element = _a.sent();
-                        return [2 /*return*/, this.repository.save(element)];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, contactService.nodemailer(user)];
+                    case 2:
+                        user = _a.sent();
+                        res.send(user);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _a.sent();
+                        res.status(400).send('Mail problème');
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
-        });
-    };
-    AbstractService.prototype.update = function (idElement, element) {
-        return __awaiter(this, void 0, void 0, function () {
-            var one;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.findOne(idElement)];
-                    case 1:
-                        one = _a.sent();
-                        if (!one) {
-                            throw new Error("l'objet d'id " + idElement + " n'existe pas ");
-                        }
-                        this.repository.merge(one, element);
-                        return [2 /*return*/, this.repository.save(one, element)];
-                }
-            });
-        });
-    };
-    AbstractService.prototype.delete = function (id) {
-        return this.repository.delete(id);
-    };
-    return AbstractService;
-}());
-exports.AbstractService = AbstractService;
+        }); }),
+        app.use('/contact', mailRouter);
+};

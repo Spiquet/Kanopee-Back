@@ -36,51 +36,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var AbstractService = /** @class */ (function () {
-    function AbstractService() {
+var nodemailer_1 = require("nodemailer");
+var environment_1 = require("./../environments/environment");
+var ContactService = /** @class */ (function () {
+    function ContactService() {
     }
-    AbstractService.prototype.getAll = function () {
-        return this.repository.find();
-    };
-    AbstractService.prototype.getById = function (id) {
-        var getId = this.repository.findOne(id);
-        if (!getId) {
-            throw new Error("l'objet d'id " + id + " n'existe pas ");
-        }
-        return getId;
-    };
-    AbstractService.prototype.add = function (element) {
+    // NODEMAILER
+    ContactService.prototype.nodemailer = function (req) {
         return __awaiter(this, void 0, void 0, function () {
+            var testAccount, transporter, info, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.create(element)];
+                    case 0: return [4 /*yield*/, nodemailer_1.createTestAccount()];
                     case 1:
-                        element = _a.sent();
-                        return [2 /*return*/, this.repository.save(element)];
+                        testAccount = _a.sent();
+                        transporter = nodemailer_1.createTransport({
+                            host: environment_1.environnment.mailHost,
+                            port: environment_1.environnment.mailPort,
+                            secure: false,
+                            auth: {
+                                user: testAccount.user,
+                                pass: testAccount.pass,
+                            },
+                        });
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, transporter.sendMail({
+                                from: environment_1.environnment.EMAIL,
+                                to: environment_1.environnment.EMAIL,
+                                subject: 'Test',
+                                html: "<b><a>Mail de contact pour test</a>\n      </b>",
+                                text: 'jjjj',
+                            })];
+                    case 3:
+                        info = _a.sent();
+                        console.log('Message sent: %s', info.messageId);
+                        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+                        // Preview only available when sending through an Ethereal account
+                        console.log('Preview URL: %s', nodemailer_1.getTestMessageUrl(info));
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_1 = _a.sent();
+                        console.error(error_1);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
     };
-    AbstractService.prototype.update = function (idElement, element) {
-        return __awaiter(this, void 0, void 0, function () {
-            var one;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.findOne(idElement)];
-                    case 1:
-                        one = _a.sent();
-                        if (!one) {
-                            throw new Error("l'objet d'id " + idElement + " n'existe pas ");
-                        }
-                        this.repository.merge(one, element);
-                        return [2 /*return*/, this.repository.save(one, element)];
-                }
-            });
-        });
-    };
-    AbstractService.prototype.delete = function (id) {
-        return this.repository.delete(id);
-    };
-    return AbstractService;
+    return ContactService;
 }());
-exports.AbstractService = AbstractService;
+exports.ContactService = ContactService;

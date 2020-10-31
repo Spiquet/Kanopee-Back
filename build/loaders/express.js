@@ -44,8 +44,13 @@ var cors_1 = __importDefault(require("cors"));
 var express_1 = require("express");
 exports.default = (function (app) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        app.get('/status', function (req, res) { res.status(200).end(); });
-        app.head('/status', function (req, res) { res.status(200).end(); });
+        app.get('/status', function (req, res) {
+            res.status(200).end();
+        });
+        app.head('/status', function (req, res) {
+            res.status(200).end();
+        });
+        // TODO CHECK PATH.DELIMITER FOR THIS USE
         app.use('/uploads', express_1.static(__dirname + '/../../uploads'));
         app.enable('trust proxy');
         app.use(cors_1.default());

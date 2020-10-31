@@ -29,10 +29,10 @@ export class AuthService {
 
     user = await this.repository.save(user);
 
-    const tokenString = randomBytes(12).toString('hex');
+    const tokenString = randomBytes(12).toString('hex'); // character string
     await this.nodemailer(tokenString, user);
 
-    const token = new Token();
+    const token = new Token(); // Real Token Object
     token.user = user;
     token.value = tokenString;
     // token.expiration = new Date(getTime() + 1000 * 60 * 60 * 24 * 2);
@@ -41,7 +41,9 @@ export class AuthService {
   }
 
   async signin(email: string, password: string) {
+
     const error = new Error('Invalid credentials');
+
     const user = await this.repository.findOne({ where: { email } });
 
     // tslint:disable-next-line: whitespace
@@ -49,34 +51,35 @@ export class AuthService {
       throw new Error('NOT_ACTIVE');
     }
 
-    if (!user) { // Si pas user
+    if (!user) { // if not a user
       throw error;
     }
-
+    // Verification of the correlation between password and password retrieved in entry
     const isPasswordValid = await verify(user.password, password);
 
     if (!isPasswordValid) {
       throw error;
     }
 
-    // construcion du payload
+    // payload construction
     const payload = { id: user.id, email: user.email, role: user.role };
 
-    const secret1 = environnment.JWT_SECRET; // Variable environnement
+    // Variable environments
+    const secret1 = environnment.JWT_SECRET;
     if (!secret1) {
-      throw new Error('Servor not correctly configured');
+      throw new Error('Servor not correctly configured'); // For the start of production  : if Variable environments not set
     }
-    const token = sign(payload, secret1); // id username and role dans signin PAS de password
+    const token = sign(payload, secret1); // id username and role in signin (NO de password)
     return { token, user };
   }
 
-  async confirmation(tokenStr: string) {
-    const token = await this.tokenService.getByValue(tokenStr); // récupère le token associé à la valeure tokenStr
+  async confirmation(tokenStr: string) { // string of characters
+    const token = await this.tokenService.getByValue(tokenStr); // retrieves the token associated with the value tokenStr (string)
     if (!token) {
       throw new Error('Lien invalide');
     }
 
-    await this.userService.userActivation(token.user); // on appelle méthode userActivation pour activer un compte
+    await this.userService.userActivation(token.user); // we call userActivation method to activate an account
   }
 
   // NODEMAILER
@@ -100,7 +103,7 @@ export class AuthService {
 
       // send mail with defined transport object
       const info = await transporter.sendMail({
-        from: environnment.EMAIL, // sender address // Mettre adresse client
+        from: environnment.EMAIL, // sender address //
         to: user.email, // list of receivers
         subject: 'Activation link', // Subject line
         html: `<b><a href=${environnment.confirmationUrl + token}>

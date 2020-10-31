@@ -36,13 +36,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var connected_middleware_1 = require("./../middleware/connected-middleware");
 var event_service_1 = require("./../services/event.service");
 var express_1 = require("express");
 var comon_controller_1 = require("../core/comon.controller");
 exports.EventController = function (app) {
     var eventService = new event_service_1.EventService();
     var router = express_1.Router();
-    router.get('/eventKulteur/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    router.use(connected_middleware_1.connected());
+    router.get('/kulteur/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -55,13 +57,26 @@ exports.EventController = function (app) {
             }
         });
     }); });
-    router.get('/eventSite/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    router.get('/site/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _b = (_a = res).send;
                     return [4 /*yield*/, eventService.getByIdEventSite(Number(req.params.id))];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    router.get('/workshops', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = (_a = res).send;
+                    return [4 /*yield*/, eventService.getWorkshopsEvent()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [2 /*return*/];

@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var message_entity_1 = require("./message.entity");
 var typeorm_1 = require("typeorm");
 var user_entity_1 = require("./user.entity");
 var event_entity_1 = require("./event.entity");
@@ -44,13 +45,18 @@ var Site = /** @class */ (function () {
         __metadata("design:type", String)
     ], Site.prototype, "name", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return user_entity_1.User; }, function (user) { return user.site; }),
+        typeorm_1.OneToMany(function (type) { return user_entity_1.User; }, function (user) { return user.site; }, { cascade: true, onDelete: 'CASCADE' }),
+        typeorm_1.JoinColumn(),
         __metadata("design:type", Array)
     ], Site.prototype, "users", void 0);
     __decorate([
         typeorm_1.OneToMany(function (type) { return event_entity_1.Event; }, function (event) { return event.site; }),
         __metadata("design:type", Array)
     ], Site.prototype, "events", void 0);
+    __decorate([
+        typeorm_1.OneToMany(function (type) { return message_entity_1.Message; }, function (message) { return message.site; }),
+        __metadata("design:type", Array)
+    ], Site.prototype, "messages", void 0);
     Site = __decorate([
         typeorm_1.Entity()
     ], Site);

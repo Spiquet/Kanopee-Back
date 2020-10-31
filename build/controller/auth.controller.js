@@ -44,36 +44,31 @@ var auth_service_1 = require("../services/auth.service");
 exports.AuthController = function (app) {
     var authRouter = express_1.default.Router();
     var authService = new auth_service_1.AuthService();
-    // const secret = process.env.WILD_JWT_SECRET;
-    // if (!secret) {
-    //   throw new Error('Pas de secret setup');
-    // }
-    // authRouter.use(jwt({ secret }));
-    // authRouter.get('/', (req: Request, res: Response) => {
-    //   res.send('Protected Routes');
-    // }),
-    authRouter.post('/signup', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var user, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    user = req.body;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, authService.signup(user)];
-                case 2:
-                    user = _a.sent();
-                    res.send(user);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _a.sent();
-                    res.status(409).send('L\'utilisateur existe déjà');
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
-    }); }),
+    authRouter.get('/', function (req, res) {
+        res.send('Protected Routes');
+    }),
+        authRouter.post('/signup', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+            var user, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        user = req.body;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, authService.signup(user)];
+                    case 2:
+                        user = _a.sent();
+                        res.send(user);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _a.sent();
+                        res.status(409).send('L\'utilisateur existe déjà');
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); }),
         authRouter.get('/confirmation/:token', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
             var tokenStr, error_2;
             return __generator(this, function (_a) {
@@ -89,7 +84,7 @@ exports.AuthController = function (app) {
                         return [3 /*break*/, 4];
                     case 3:
                         error_2 = _a.sent();
-                        res.sendStatus(400).send('Lien invalide');
+                        res.status(400).send('Lien invalide');
                         return [3 /*break*/, 4];
                     case 4: return [4 /*yield*/, authService.confirmation(tokenStr)];
                     case 5:
@@ -99,21 +94,27 @@ exports.AuthController = function (app) {
             });
         }); }),
         authRouter.post('/signin', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-            var user, error_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var userB, _a, token, user, error_3;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        user = req.body;
-                        _a.label = 1;
+                        userB = req.body;
+                        _b.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, authService.signup(user)];
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, authService.signin(userB.email, userB.password)];
                     case 2:
-                        _a.sent();
-                        res.status(204);
+                        _a = _b.sent(), token = _a.token, user = _a.user;
+                        res.set('access-control-expose-headers', 'JWT-TOKEN');
+                        res.set('JWT-TOKEN', token); // Set and send  header (autorization)
+                        res.send(user); // Send the user
                         return [3 /*break*/, 4];
                     case 3:
-                        error_3 = _a.sent();
+                        error_3 = _b.sent();
+                        console.log(error_3);
+                        if (error_3.message === 'NOT_ACTIVE') {
+                            res.status(400).send('Le compte n\'est pas activé, vérifiez vos spams ');
+                        }
                         res.status(409).send('Informations érronnées');
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];

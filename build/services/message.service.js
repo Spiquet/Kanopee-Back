@@ -16,19 +16,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var message_repository_1 = require("./../repository/message.repository");
 var typeorm_1 = require("typeorm");
 var abstract_service_1 = require("../core/abstract.service");
-var MessageRole_1 = require("../models/entity/MessageRole");
+var messageRole_1 = require("../models/entity/messageRole");
 var MessageService = /** @class */ (function (_super) {
     __extends(MessageService, _super);
     function MessageService() {
-        var _this = _super.call(this) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.repository = typeorm_1.getCustomRepository(message_repository_1.MessageRepository);
         return _this;
     }
+    MessageService.prototype.getMessages = function (user) {
+        if (user.role === 'user') {
+            return this.getMessagesBySiteId(user.site.id);
+        }
+        else if (user.role === 'admin' || user.role === 'kulteur') {
+            return this.getAllMessages();
+        }
+    };
     MessageService.prototype.getAllMessages = function () {
-        return this.repository.find({ where: { role: MessageRole_1.MessageRole.MESSAGE } });
+        return this.repository.find({ where: { role: messageRole_1.MessageRole.MESSAGE }, relations: ['site', 'user'], order: { createdAt: 'DESC' } });
+    };
+    // getMessagesBySite(currentSite: Site) {
+    //   return this.repository.find({ where: { site: currentSite } });
+    // }
+    MessageService.prototype.getMessagesBySiteId = function (SiteId) {
+        return this.repository.find({ where: { site: { id: SiteId } }, relations: ['site', 'user'], order: { createdAt: 'DESC' } });
     };
     MessageService.prototype.getAllQuestions = function () {
-        return this.repository.find({ where: { role: MessageRole_1.MessageRole.QUESTION } });
+        return this.repository.find({ where: { role: messageRole_1.MessageRole.QUESTION } });
     };
     return MessageService;
 }(abstract_service_1.AbstractService));

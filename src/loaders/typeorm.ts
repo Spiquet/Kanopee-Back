@@ -10,17 +10,17 @@ import { Response } from '../models/entity/response.entity';
 import { Site } from '../models/entity/site.entity';
 
 export default async () => {
-	const connection: Connection = await createConnection({
-		type: 'mysql',
-		host: environnment.API_DB_HOST,
-		port: 1234,
-		username: environnment.API_DB_USER,
-		password: environnment.API_DB_PASSWORD,
-		database: environnment.DB_DATABASE,
-		entities: [ Atelier, Site, User, Event, Message, Participation, Response, Token ],
+const connection: Connection = await createConnection({
+type: 'mysql',
+host: environnment.API_DB_HOST,
+port: 1234,
+username: environnment.API_DB_USER,
+password: environnment.API_DB_PASSWORD,
+database: environnment.DB_DATABASE,
+entities: [ Atelier, Site, User, Event, Message, Participation, Response, Token ],
 
-		synchronize: true
-	});
+synchronize: true,
+});
 
-	return connection;
+return connection;
 };

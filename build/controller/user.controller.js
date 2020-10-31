@@ -36,12 +36,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var connected_middleware_1 = require("./../middleware/connected-middleware");
 var user_service_1 = require("./../services/user.service");
 var express_1 = require("express");
 var comon_controller_1 = require("../core/comon.controller");
 exports.UserController = function (app) {
     var userService = new user_service_1.UserService();
     var router = express_1.Router();
+    router.use(connected_middleware_1.connected());
+    router.get('/kulteur', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = (_a = res).send;
+                    return [4 /*yield*/, userService.getKulteur()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     router.get('/role', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, _b;
         return __generator(this, function (_c) {
@@ -51,6 +66,33 @@ exports.UserController = function (app) {
                     return [4 /*yield*/, userService.getKulteur()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    // Sur l'URL "me" dans "users", on récupère l'utilisateur associé à l'ID qu'il y a dans le Token
+    router.get('/me', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var user, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(req.user);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userService.getById(req.user.id)];
+                case 2:
+                    user = _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.log(error_1);
+                    return [3 /*break*/, 4];
+                case 4:
+                    if (!user) {
+                        res.status(404).send('Aucun utilisateur trouvé pour ce token');
+                    }
+                    res.send(user);
                     return [2 /*return*/];
             }
         });

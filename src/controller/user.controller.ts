@@ -25,7 +25,7 @@ export const UserController = (app: Application) => {
     try {
       user = await userService.getById((req as any).user.id);
     } catch (error) {
-      console.log(error);
+    console.log(error);
     }
 
     if (!user) {

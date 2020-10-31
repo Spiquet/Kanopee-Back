@@ -14,6 +14,12 @@ var user_entity_1 = require("./user.entity");
 var atelier_entity_1 = require("./atelier.entity");
 var site_entity_1 = require("./site.entity");
 var participation_entity_1 = require("./participation.entity");
+var EventRole;
+(function (EventRole) {
+    EventRole["ATELIER"] = "Atelier";
+    EventRole["CULTURE"] = "Culture-entretien";
+    EventRole["DISTRIBUTION"] = "Distribution";
+})(EventRole = exports.EventRole || (exports.EventRole = {}));
 var Event = /** @class */ (function () {
     function Event() {
     }
@@ -21,6 +27,14 @@ var Event = /** @class */ (function () {
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
     ], Event.prototype, "id", void 0);
+    __decorate([
+        typeorm_1.Column({
+            type: 'enum',
+            enum: EventRole,
+            default: EventRole.ATELIER,
+        }),
+        __metadata("design:type", String)
+    ], Event.prototype, "eventType", void 0);
     __decorate([
         typeorm_1.Column({ type: 'timestamp' }),
         __metadata("design:type", Date)
@@ -30,15 +44,24 @@ var Event = /** @class */ (function () {
         __metadata("design:type", Date)
     ], Event.prototype, "endAt", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return user_entity_1.User; }, function (user) { return user.events; }, { eager: true }),
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], Event.prototype, "color", void 0);
+    __decorate([
+        typeorm_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Event.prototype, "description", void 0);
+    __decorate([
+        typeorm_1.ManyToOne(function (type) { return user_entity_1.User; }, function (user) { return user.events; }),
         __metadata("design:type", user_entity_1.User)
     ], Event.prototype, "user", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return atelier_entity_1.Atelier; }, function (atelier) { return atelier.events; }, { eager: true }),
+        typeorm_1.ManyToOne(function (type) { return atelier_entity_1.Atelier; }, function (atelier) { return atelier.events; }, { cascade: true, onDelete: 'CASCADE' }),
+        typeorm_1.JoinColumn(),
         __metadata("design:type", atelier_entity_1.Atelier)
     ], Event.prototype, "atelier", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return site_entity_1.Site; }, function (site) { return site.events; }, { eager: true }),
+        typeorm_1.ManyToOne(function (type) { return site_entity_1.Site; }, function (site) { return site.events; }),
         __metadata("design:type", site_entity_1.Site)
     ], Event.prototype, "site", void 0);
     __decorate([

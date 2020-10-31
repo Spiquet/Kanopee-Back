@@ -36,15 +36,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var connected_middleware_1 = require("./../middleware/connected-middleware");
+var attachCurrentUser_middleware_1 = require("./../middleware/attachCurrentUser-middleware");
 var express_1 = require("express");
+var check_role_middleware_1 = require("../middleware/check-role-middleware");
+var user_entity_1 = require("../models/entity/user.entity");
 exports.commonController = function (service, commonRouter) {
-    // const secret1 = process.env.WILD_JWT_SECRET;
-    // if (!secret) {
-    //     throw new Error(‘Pas de secret SETUP’);
-    //   }
-    // commonRouter.use(jwt({secret: secret})); // secret = variable d’environnement
     if (commonRouter === void 0) { commonRouter = express_1.Router(); }
-    commonRouter.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    commonRouter.use(connected_middleware_1.connected());
+    commonRouter.use(attachCurrentUser_middleware_1.attachCurrentUser);
+    commonRouter.get('/', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.KULTEUR, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -57,7 +58,7 @@ exports.commonController = function (service, commonRouter) {
             }
         });
     }); });
-    commonRouter.get('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    commonRouter.get('/:id', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.KULTEUR, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -70,7 +71,7 @@ exports.commonController = function (service, commonRouter) {
             }
         });
     }); });
-    commonRouter.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    commonRouter.post('/', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -83,18 +84,19 @@ exports.commonController = function (service, commonRouter) {
             }
         });
     }); });
-    commonRouter.put('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    commonRouter.put('/:id', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var obj;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, service.update(parseInt(req.params.id, 10), req.body)];
                 case 1:
-                    _a.sent();
-                    res.sendStatus(200);
+                    obj = _a.sent();
+                    res.send(obj);
                     return [2 /*return*/];
             }
         });
     }); });
-    commonRouter.delete('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    commonRouter.delete('/:id', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.USER]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, service.delete(parseInt(req.params.id, 10))];

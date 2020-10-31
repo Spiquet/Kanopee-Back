@@ -35,38 +35,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+var atelier_Multer_1 = require("../middleware/atelier-Multer");
 var atelier_service_1 = require("./../services/atelier.service");
-var multer_1 = __importDefault(require("multer"));
+var express_1 = require("express");
 var comon_controller_1 = require("../core/comon.controller");
+var check_role_middleware_1 = require("../middleware/check-role-middleware");
+var user_entity_1 = require("../models/entity/user.entity");
+var connected_middleware_1 = require("../middleware/connected-middleware");
 exports.AteliersController = function (app) {
     var atelierService = new atelier_service_1.AtelierService();
-    var router = comon_controller_1.commonController(atelierService);
-    app.use('/ateliers', router);
-    var storage = multer_1.default.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, 'uploads/');
-        },
-        filename: function (req, file, cb) {
-            cb(null, file.fieldname + '-' + Date.now() + '.pdf');
-        },
-    });
-    var upload = multer_1.default({ storage: storage,
-        fileFilter: function (req, file, cb) {
-            if (!file.originalname.match(/\.(pdf)$/)) {
-                return cb(new Error('Seul les formats PDF sont acceptés'), false);
-            }
-            cb(null, true);
-        },
-    });
-    var cpUpload = upload.fields([
-        { name: 'userSupport', maxCount: 1 },
-        { name: 'kulteurSupport', maxCount: 1 },
-    ]);
-    router.post('/file', cpUpload, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var router = express_1.Router();
+    // middleware connected
+    router.use(connected_middleware_1.connected());
+    router.post('/file', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN]), atelier_Multer_1.multerMiddleWare(), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var files, error, _a, _b;
         var _c, _d;
         return __generator(this, function (_e) {
@@ -76,6 +58,7 @@ exports.AteliersController = function (app) {
                     if (!files) {
                         error = new Error('Please upload a file');
                         res.sendStatus(400);
+                        console.info('');
                         return [2 /*return*/, next(error)];
                     }
                     _b = (_a = res).send;
@@ -86,20 +69,12 @@ exports.AteliersController = function (app) {
             }
         });
     }); });
-    router.put('/fileupload', cpUpload, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-        var files, _a, _b;
-        var _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
-                case 0:
-                    files = req.files;
-                    _b = (_a = res).send;
-                    return [4 /*yield*/, atelierService.updateFile(req.body, [(_c = files) === null || _c === void 0 ? void 0 : _c.userSupport[0], (_d = files) === null || _d === void 0 ? void 0 : _d.kulteurSupport[0]])];
-                case 1:
-                    _b.apply(_a, [_e.sent()]);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    return router;
+    router.put('/fileupload/:id', check_role_middleware_1.checkRole([user_entity_1.UserRole.ADMIN]), atelier_Multer_1.multerMiddleWare(), function (req, res, next) {
+        var _a, _b;
+        var files = req.files;
+        // tslint:disable-next-line: whitespace
+        res.send(atelierService.updateFile(req.body, [(_a = files) === null || _a === void 0 ? void 0 : _a.userSupport[0], (_b = files) === null || _b === void 0 ? void 0 : _b.kulteurSupport[0]]));
+    });
+    router = comon_controller_1.commonController(atelierService, router);
+    app.use('/ateliers', router);
 };

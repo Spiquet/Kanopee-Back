@@ -47,6 +47,22 @@ var Atelier = /** @class */ (function () {
         __metadata("design:type", String)
     ], Atelier.prototype, "link2", void 0);
     __decorate([
+        typeorm_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Atelier.prototype, "link3", void 0);
+    __decorate([
+        typeorm_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Atelier.prototype, "link4", void 0);
+    __decorate([
+        typeorm_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Atelier.prototype, "link5", void 0);
+    __decorate([
+        typeorm_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Atelier.prototype, "link6", void 0);
+    __decorate([
         typeorm_1.OneToMany(function (type) { return event_entity_1.Event; }, function (event) { return event.atelier; }),
         __metadata("design:type", Array)
     ], Atelier.prototype, "events", void 0);

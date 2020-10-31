@@ -1,15 +1,15 @@
 import { createTestAccount, createTransport, getTestMessageUrl } from 'nodemailer';
 import { User } from './../models/entity/user.entity';
 import { environnment } from './../environments/environment';
-import {MailController} from './../controller/contact.controller';
 import { Request } from 'express';
+import { userInfo } from 'os';
 
 export class ContactService {
 
   constructor() {}
 
 // NODEMAILER
- async nodemailer( req: Request) {
+ public async nodemailer( req: Request) {
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
   const testAccount = await createTestAccount();
@@ -29,8 +29,8 @@ export class ContactService {
 
     // send mail with defined transport object
     const info = await transporter.sendMail({
-      from: 'piquet.simon@yahoo.fr', // sender address // Mettre adresse client
-      to: 'piquet.simon@yahoo.fr' , // list of receivers
+      from: environnment.EMAIL, // sender address // Mettre adresse client
+      to: environnment.EMAIL , // list of receivers
       subject: 'Test', // Subject line
       html: `<b><a>Mail de contact pour test</a>
       </b>`, // html body

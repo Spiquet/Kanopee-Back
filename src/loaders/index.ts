@@ -8,5 +8,4 @@ export default async (app: Application) => {
 	await typeormLoader();
 	console.log('Typeorm Intialized');
 
-
 };

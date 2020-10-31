@@ -30,7 +30,7 @@ export const MessageController = (app: Application) => {
     res.send(await messageService.getAllQuestions());
   });
 
-  router.post('/', checkRole([UserRole.ADMIN, UserRole.USER]), async (req: Request, res: Response) => {
+  router.post('/', checkRole([UserRole.ADMIN, UserRole.USER, UserRole.KULTEUR]), async (req: Request, res: Response) => {
     const userSite = (req as any).user?.site;
     if (userSite) {
       req.body.site = userSite;
