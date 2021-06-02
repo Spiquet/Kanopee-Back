@@ -100,7 +100,7 @@ export class AuthService {
         from: environnment.EMAIL, // sender address // Mettre adresse client
         to: user.email, // list of receivers
         subject: 'Activation link', // Subject line
-        html: `<b><a href=${environnment.confirmationUrl + token}>
+        html: `<b><a href=${environnment.confirmation_Url + token}>
         Activation link </a>
         </b>`, // html body
       });

@@ -2,6 +2,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { Application, static as staticExpress } from 'express';
 
+require('dotenv').config();
+
 export default async (app: Application) => {
 	app.get('/status', (req, res) => {
 		res.status(200).end();
