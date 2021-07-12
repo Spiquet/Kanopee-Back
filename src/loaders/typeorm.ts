@@ -9,8 +9,11 @@ import { Participation } from '../models/entity/participation.entity';
 import { Response } from '../models/entity/response.entity';
 import { Site } from '../models/entity/site.entity';
 
-export default async () => {
-	const connection: Connection = await createConnection({
+let connection: Connection | null = null
+
+
+export default async function getConnection() {
+	const connection = await createConnection({
 		type: 'mysql',
 		username: environnment.API_DB_USER,
 		password: environnment.API_DB_PASSWORD,
@@ -22,3 +25,7 @@ export default async () => {
 
 	return connection;
 };
+
+export async function closeConnection() {
+	await connection?.close();
+  }
