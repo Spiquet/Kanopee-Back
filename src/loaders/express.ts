@@ -2,7 +2,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { Application, static as staticExpress } from 'express';
 
-require('dotenv').config();
+// require('dotenv').config();
+
 
 export default async (app: Application) => {
 	app.get('/status', (req, res) => {
@@ -20,4 +21,5 @@ export default async (app: Application) => {
 	app.use(bodyParser.json());
 
 	return app;
+
 };

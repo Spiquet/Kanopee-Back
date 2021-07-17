@@ -13,6 +13,8 @@ let connection: Connection | null = null
 
 
 export default async function getConnection() {
+	console.log(environnment);
+	
 	const connection = await createConnection({
 		type: 'mysql',
 		username: environnment.API_DB_USER,

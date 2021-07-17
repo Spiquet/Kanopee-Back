@@ -1,4 +1,5 @@
-  
+require('dotenv').config();
+
  export const environnment = {
  	JWT_SECRET: process.env.JWT_SECRET,
  	API_DB_USER: process.env.API_DB_USER,
