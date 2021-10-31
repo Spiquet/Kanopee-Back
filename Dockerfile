@@ -10,7 +10,6 @@ RUN npm install && mv ./node_modules /node_modules
 
 COPY . /usr/src/app
 COPY .env .
-COPY ./src/loaders/typeorm.ts .
 
 EXPOSE 3000
 
