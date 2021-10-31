@@ -5,6 +5,7 @@
  	API_DB_HOST: process.env.API_DB_HOST,
  	API_DB_PASSWORD: process.env.API_DB_PASSWORD,
  	API_DB_PORT: process.env.API_DB_PORT,
+	API_ENTITIES: process.env.API_ENTITIES,
  	DB_DATABASE:  process.env.DB_DATABASE,
  	upload: process.env.UPLOAD,
 	mailHost: 'smtp.ethereal.email',

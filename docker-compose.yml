@@ -1,30 +1,45 @@
 version: '3.3'
 services:
+  api:
+    build: . 
+    hostname: api
+    container_name: api_container
+    depends_on:
+      - mysql
+    ports:
+      - 4000:3000
+    
   mysql:
     image: mysql:5.7
+    hostname: mysql
+    container_name: db_container
     restart: always
     command: --default-authentication-plugin=mysql_native_password
-    env_file:
-      - .env
-    ports:
-      # <Port exposed> : < MySQL Port running inside container>
-      - '3306:3306'
-    expose:
-      # Opens port 3306 on the container
-      - '3306'
-      # Where our data will be persisted
-    volumes:
-      - mysql:/var/lib/mysql
+   
 
-  adminer:
-    image: adminer
-    restart: always
+    env_file:
+        - .env
     ports:
-      - 8080:8080
-    depends_on: 
-      - mysql
-# Names our volume
-volumes:
-  mysql:
+       # <Port exposed> : < MySQL Port running inside container>
+       - '3306:3306'
+    expose:
+       # Opens port 3306 on the container
+       - '3306'
+       # Where our data will be persisted
+    volumes:
+       - ./mysql:/var/lib/mysql/data
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #   depends_on: 
+  #     - mysql
+# Names our volume 
+# volumes:
+#   mysql:
+
+
 
     
