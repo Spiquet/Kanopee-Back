@@ -17,13 +17,13 @@ async function startServer() {
   await loaders(app);
   console.log('Nous sommes ici')
   
-  AteliersController(app);
-  EventController(app);
-  MessageController(app);
-  ResponseController(app);
-  SiteController(app);
-  AuthController(app);
-  UserController(app);
+  // AteliersController(app);
+  // EventController(app);
+  // MessageController(app);
+  // ResponseController(app);
+  // SiteController(app);
+  // AuthController(app);
+  // UserController(app);
 
   app.listen(3000, () => console.log('Express server  is running'));
 

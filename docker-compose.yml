@@ -8,6 +8,7 @@ services:
       - mysql
     ports:
       - 4000:3000
+   
     
   mysql:
     image: mysql:5.7
@@ -29,16 +30,16 @@ services:
     volumes:
        - ./mysql:/var/lib/mysql/data
 
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
-  #   depends_on: 
-  #     - mysql
+  adminer:
+     image: adminer
+     restart: always
+     ports:
+       - 8080:8080
+     depends_on: 
+       - mysql
 # Names our volume 
-# volumes:
-#   mysql:
+volumes:
+  mysql:
 
 
 

@@ -1,4 +1,4 @@
-import { EventRole } from './../models/entity/event.entity';
+import { EventRole } from '../entity/event.entity';
 import { EventRepository } from '../repository/event.repository';
 import { getCustomRepository } from 'typeorm';
 import { AbstractService } from '../core/abstract.service';

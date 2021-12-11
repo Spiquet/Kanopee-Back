@@ -1,4 +1,4 @@
-import { Atelier } from '../models/entity/atelier.entity';
+import { Atelier } from '../entity/atelier.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Atelier)

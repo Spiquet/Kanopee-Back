@@ -1,13 +1,13 @@
 import { environnment } from '../environments/environment';
-import { Token } from './../models/entity/token.entity';
-import { User } from './../models/entity/user.entity';
+import { Token } from '../entity/token.entity';
+import { User } from '../entity/user.entity';
 import { createConnection } from 'typeorm';
-import { Atelier } from './../models/entity/atelier.entity';
-import { Event } from '../models/entity/event.entity';
-import { Message } from '../models/entity/message.entity';
-import { Participation } from '../models/entity/participation.entity';
-import { Response } from '../models/entity/response.entity';
-import { Site } from '../models/entity/site.entity';
+import { Atelier } from '../entity/atelier.entity';
+import { Event } from '../entity/event.entity';
+import { Message } from '../entity/message.entity';
+import { Participation } from '../entity/participation.entity';
+import { Response } from '../entity/response.entity';
+import { Site } from '../entity/site.entity';
 
 export default async () => {
 
@@ -15,15 +15,7 @@ export default async () => {
 	while (retries) {
 		try {
 
-			await createConnection({
-				type: 'mysql',
-				username: environnment.API_DB_USER,
-				password: environnment.API_DB_PASSWORD,
-				database: environnment.DB_DATABASE,
-				entities: [Atelier, Event,  Message, Participation, Response, Site, Token, User],
-
-				synchronize: true
-			});
+			await createConnection();
 			break
 
 		}

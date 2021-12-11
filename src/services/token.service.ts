@@ -1,6 +1,6 @@
 import { TokenRepository } from './../repository/token.repository';
 import { getCustomRepository } from 'typeorm';
-import { Token } from '../models/entity/token.entity';
+import { Token } from '../entity/token.entity';
 
 export class TokenService {
   protected repository = getCustomRepository(TokenRepository);

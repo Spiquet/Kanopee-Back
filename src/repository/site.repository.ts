@@ -1,4 +1,4 @@
-import { Site } from './../models/entity/site.entity';
+import { Site } from '../entity/site.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Site)

@@ -3,7 +3,7 @@ import { AtelierService } from './../services/atelier.service';
 import { Application, Request, Response, NextFunction, Handler, Router } from 'express';
 import { commonController } from '../core/comon.controller';
 import { checkRole } from '../middleware/check-role-middleware';
-import { UserRole } from '../models/entity/user.entity';
+import { UserRole } from '../entity/user.entity';
 import { connected } from '../middleware/connected-middleware';
 
 export const AteliersController = (app: Application) => {

@@ -3,7 +3,7 @@ import { attachCurrentUser } from './../middleware/attachCurrentUser-middleware'
 import { AbstractService } from './abstract.service';
 import express, { Request, Response, Router } from 'express';
 import { checkRole } from '../middleware/check-role-middleware';
-import { UserRole } from '../models/entity/user.entity';
+import { UserRole } from '../entity/user.entity';
 
 export const commonController = (service: AbstractService, commonRouter = Router()) => {
 

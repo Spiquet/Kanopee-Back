@@ -1,4 +1,4 @@
-import { UserRole } from './../models/entity/user.entity';
+import { UserRole } from '../entity/user.entity';
 import { connected } from './../middleware/connected-middleware';
 import { MessageService } from './../services/message.service';
 import { Application, Router, Request, Response } from 'express';

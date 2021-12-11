@@ -9,7 +9,8 @@ COPY package*.json ./
 RUN npm install && mv ./node_modules /node_modules
 
 COPY . /usr/src/app
-COPY .env .
+COPY ormconfig.docker.json ./ormconfig.json
+COPY ormconfig.env .
 
 EXPOSE 3000
 

@@ -1,9 +1,9 @@
-import { Site } from './../models/entity/site.entity';
+import { Site } from '../entity/site.entity';
 import { MessageRepository } from './../repository/message.repository';
 import { getCustomRepository } from 'typeorm';
 import { AbstractService } from '../core/abstract.service';
-import { MessageRole } from '../models/entity/messageRole';
-import { User } from '../models/entity/user.entity';
+import { MessageRole } from '../entity/messageRole';
+import { User } from '../entity/user.entity';
 
 export class MessageService extends AbstractService {
   protected repository = getCustomRepository(MessageRepository);

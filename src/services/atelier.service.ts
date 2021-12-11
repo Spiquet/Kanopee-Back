@@ -2,7 +2,7 @@ import { environnment } from './../environments/environment';
 import { AtelierRepository } from '../repository/atelier.repository';
 import { getCustomRepository } from 'typeorm';
 import { AbstractService } from '../core/abstract.service';
-import { Atelier } from '../models/entity/atelier.entity';
+import { Atelier } from '../entity/atelier.entity';
 
 export class AtelierService extends AbstractService {
   protected repository = getCustomRepository(AtelierRepository);

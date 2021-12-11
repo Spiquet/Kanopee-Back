@@ -1,4 +1,4 @@
-import { UserRole } from '../models/entity/user.entity';
+import { UserRole } from '../entity/user.entity';
 import { Response, Request, NextFunction } from 'express';
 
 export const checkRole = (roles: UserRole[]) => {

@@ -1,6 +1,6 @@
 import { environnment } from './../environments/environment';
-import { Token } from './../models/entity/token.entity';
-import { User } from './../models/entity/user.entity';
+import { Token } from '../entity/token.entity';
+import { User } from '../entity/user.entity';
 import { UserRepository } from '../repository/user.repository';
 import { getCustomRepository } from 'typeorm';
 import { hash, verify } from 'argon2';
@@ -100,9 +100,9 @@ export class AuthService {
         from: environnment.EMAIL, // sender address // Mettre adresse client
         to: user.email, // list of receivers
         subject: 'Activation link', // Subject line
-        html: `<b><a href=${environnment.confirmation_Url + token}>
-        Activation link </a>
-        </b>`, // html body
+        // html: `<b><a href=${environnment.confirmation_Url + token}>
+        // Activation link </a>
+        // </b>`, // html body
       });
 
       console.log('Message sent: %s', info.messageId);
